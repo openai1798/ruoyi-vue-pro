@@ -54,7 +54,9 @@ public interface ProductCommentConvert {
 
     default Integer convertScores(Integer descriptionScores, Integer benefitScores) {
         // 计算评价最终综合评分 最终星数 = （商品评星 + 服务评星） / 2
-        BigDecimal sumScore = new BigDecimal(descriptionScores + benefitScores);
+        int safeDesc = descriptionScores == null ? 0 : descriptionScores;
+        int safeBenefit = benefitScores == null ? 0 : benefitScores;
+        BigDecimal sumScore = BigDecimal.valueOf((long) safeDesc + (long) safeBenefit);
         BigDecimal divide = sumScore.divide(BigDecimal.valueOf(2L), 0, RoundingMode.DOWN);
         return divide.intValue();
     }
