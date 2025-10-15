@@ -94,8 +94,8 @@ public class BpmFormServiceImpl implements BpmFormService {
      * @param fields field 数组
      */
     private void validateFields(List<String> fields) {
-        if (true) { // TODO 芋艿：兼容 Vue3 工作流：因为采用了新的表单设计器，所以暂时不校验
-            return;
+        if (CollUtil.isEmpty(fields)) {
+            return; // 空列表无需校验
         }
         Map<String, String> fieldMap = new HashMap<>(); // key 是 vModel，value 是 label
         for (String field : fields) {
