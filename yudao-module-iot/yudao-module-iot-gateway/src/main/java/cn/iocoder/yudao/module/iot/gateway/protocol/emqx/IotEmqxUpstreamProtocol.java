@@ -64,8 +64,8 @@ public class IotEmqxUpstreamProtocol {
             isRunning = true;
             log.info("[start][IoT 网关 EMQX 协议启动成功]");
         } catch (Exception e) {
-            log.error("[start][IoT 网关 EMQX 协议服务启动失败，将由容器终止]", e);
-            stop();
+            // 统一由容器处理停止流程，避免重复 stop 引发二次异常
+            log.error("[start][IoT 网关 EMQX 协议启动失败，将由容器优雅终止]", e);
             // 通过抛出运行时异常让容器感知到启动失败并优雅退出
             throw new IllegalStateException("IoT 网关 EMQX 协议启动失败", e);
         }
