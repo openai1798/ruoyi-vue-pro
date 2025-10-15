@@ -66,25 +66,8 @@ public class IotEmqxUpstreamProtocol {
         } catch (Exception e) {
             log.error("[start][IoT 网关 EMQX 协议服务启动失败，应用将关闭]", e);
             stop();
-
-            // 异步关闭应用
-            Thread shutdownThread = new Thread(() -> {
-                try {
-                    // 确保日志输出完成，使用更优雅的方式
-                    log.error("[start][由于 MQTT 连接失败，正在关闭应用]");
-                    // 等待日志输出完成
-                    Thread.sleep(1000);
-                } catch (InterruptedException ie) {
-                    Thread.currentThread().interrupt();
-                    log.warn("[start][应用关闭被中断]");
-                }
-                System.exit(1);
-            });
-            shutdownThread.setDaemon(true);
-            shutdownThread.setName("emergency-shutdown");
-            shutdownThread.start();
-
-            throw e;
+            // 通过抛出运行时异常让容器感知到启动失败并优雅退出
+            throw new IllegalStateException("IoT 网关 EMQX 协议启动失败", e);
         }
     }
 
