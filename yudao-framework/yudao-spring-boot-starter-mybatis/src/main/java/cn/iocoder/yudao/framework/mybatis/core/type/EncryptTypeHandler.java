@@ -11,6 +11,7 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 字段字段的 TypeHandler 实现类，基于 {@link AES} 实现
@@ -68,7 +69,8 @@ public class EncryptTypeHandler extends BaseTypeHandler<String> {
         // 构建 AES
         String password = SpringUtil.getProperty(ENCRYPTOR_PROPERTY_NAME);
         Assert.notEmpty(password, "配置项({}) 不能为空", ENCRYPTOR_PROPERTY_NAME);
-        aes = SecureUtil.aes(password.getBytes());
+        // 使用 UTF-8 明确指定字符集，避免在不同操作系统上因默认字符集不同导致密钥不一致
+        aes = SecureUtil.aes(password.getBytes(StandardCharsets.UTF_8));
         return aes;
     }
 

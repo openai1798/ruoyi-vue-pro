@@ -27,7 +27,8 @@ public class TDengineTableInitRunner implements ApplicationRunner {
         } catch (Exception ex) {
             // 初始化失败时打印错误消息并退出系统
             log.error("[run][TDengine初始化设备消息表结构失败，系统无法正常运行，即将退出]", ex);
-            System.exit(1);
+            // 避免强制退出 JVM，交由 Spring 容器感知失败并处理
+            throw new IllegalStateException("TDengine 初始化失败", ex);
         }
     }
 
